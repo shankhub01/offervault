@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="OfferVault AI is the AI-powered affiliate offer CRM and intelligence platform that automates advertiser email parsing, tracks publishers, calculates margins, and alerts teams before campaigns expire."
+    />
+    <meta name="theme-color" content="#07111f" />
+    <meta property="og:title" content="OfferVault AI | Affiliate Offer CRM" />
+    <meta
+      property="og:description"
+      content="Automate affiliate offer operations with AI-powered parsing, CRM workflows, margin tracking, and smart expiry alerts."
+    />
+    <meta property="og:type" content="website" />
+    <title>OfferVault AI | Premium Affiliate Offer Management</title>
+    <style>
+      :root {
+        --bg: #040b14;
+        --surface: rgba(10, 18, 31, 0.84);
+        --surface-2: rgba(16, 24, 40, 0.96);
+        --line: rgba(167, 183, 209, 0.14);
+        --text: #eff6ff;
+        --muted: #bcd0ea;
+        --brand: #7c5cff;
+        --brand-2: #28d7b7;
+        --accent: #4cc9f0;
+        --warning: #ffca62;
+        --success: #72f2c1;
+        --shadow: 0 24px 60px rgba(2, 6, 23, 0.5);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+        background:
+          radial-gradient(circle at top, rgba(124, 92, 255, 0.10), transparent 18%),
+          radial-gradient(circle at 20% 20%, rgba(40, 215, 183, 0.08), transparent 16%),
+          linear-gradient(180deg, #050a12 0%, #060d18 42%, #040b14 100%);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      a { text-decoration: none; color: inherit; }
+      img { display: block; max-width: 100%; }
+      button, input, textarea { font: inherit; }
+
+      .container {
+        width: min(1160px, calc(100% - 24px));
+        margin: 0 auto;
+      }
+
+      .section {
+        padding: 72px 0;
+        position: relative;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(7, 12, 20, 0.78);
+        color: #dbeafe;
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 8px; height: 8px; border-radius: 999px;
+        background: linear-gradient(135deg, var(--brand-2), var(--accent));
+        box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.08);
+      }
+
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(18px);
+        background: rgba(3, 8, 15, 0.75);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 74px;
+        gap: 20px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+      }
+      .brand-mark {
+        width: 36px; height: 36px; border-radius: 10px;
+        background: linear-gradient(135deg, var(--brand), #0ea5e9, var(--brand-2));
+        box-shadow: 0 16px 28px rgba(124, 92, 255, 0.35);
+        position: relative;
+        overflow: hidden;
+      }
+      .brand-mark::after {
+        content: "";
+        position: absolute; inset: 0;
+        background: linear-gradient(135deg, transparent 20%, rgba(255,255,255,0.26) 50%, transparent 80%);
+      }
+      .brand span:last-child { color: #f8fbff; font-size: 1.03rem; }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: var(--muted);
+      }
+      .nav-links a {
+        position: relative;
+        padding: 8px 4px;
+        font-weight: 500;
+      }
+      .nav-links a::after {
+        content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
+        background: linear-gradient(135deg, var(--brand), var(--accent));
+        transform: scaleX(0); transform-origin: left; transition: transform 200ms ease;
+      }
+      .nav-links a:hover::after { transform: scaleX(1); }
+      .button-row { display: flex; gap: 12px; align-items: center; }
+      .btn {
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 12px 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 160ms ease, background 180ms ease, border-color 180ms ease;
+      }
+      .btn:hover { transform: translateY(-1px); }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--brand), #6d8cff 55%, var(--accent));
+        color: white;
+        box-shadow: 0 18px 28px rgba(124, 92, 255, 0.25);
+      }
+      .btn-secondary {
+        border-color: rgba(148, 163, 184, 0.22);
+        background: rgba(7, 12, 20, 0.9);
+        color: #e5eefb;
+      }
+      .menu-toggle { display: none; }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 28px;
+        align-items: center;
+        padding: 40px 0 56px;
+      }
+      .hero-copy h1 {
+        font-size: clamp(2.8rem, 8vw, 5rem);
+        line-height: 1.02;
+        letter-spacing: -0.05em;
+        margin: 18px 0 16px;
+      }
+      .hero-copy p {
+        color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.6;
+        max-width: 600px;
+      }
+      .badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+      .badge-chip {
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        background: rgba(7, 12, 20, 0.82);
+        color: #dbe7fb;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 0.92rem;
+      }
+      .hero-metrics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 22px 0 0;
+      }
+      .metric-card {
+        flex: 1 1 140px;
+        background: linear-gradient(180deg, rgba(8, 14, 24, 0.98), rgba(7, 12, 20, 0.98));
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 14px;
+        box-shadow: var(--shadow);
+      }
+      .metric-card strong { display: block; font-size: 1.25rem; color: #fff; margin-bottom: 4px; }
+      .metric-card span { color: var(--muted); font-size: 0.92rem; }
+
+      .hero-panel {
+        background:
+          linear-gradient(145deg, rgba(10, 17, 29, 0.98), rgba(5, 10, 17, 0.98));
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        position: relative;
+      }
+      .hero-panel::after {
+        content: "";
+        position: absolute; inset: -30% -10% auto auto; width: 180px; height: 180px;
+        background: radial-gradient(circle, rgba(124, 92, 255, 0.18), transparent 60%);
+        filter: blur(8px);
+      }
+      .dashboard-topbar {
+        display: flex; justify-content: space-between; align-items: center;
+        gap: 12px; margin-bottom: 14px;
+      }
+      .mini-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        color: #dbeafe; background: rgba(124, 92, 255, 0.12); border: 1px solid rgba(124, 92, 255, 0.25);
+        border-radius: 999px; padding: 6px 8px; font-size: 0.82rem;
+      }
+      .mini-pill { color: #e2f4ff; font-size: 0.82rem; }
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 14px;
+      }
+      .panel-card {
+        background: linear-gradient(180deg, rgba(12, 20, 35, 0.96), rgba(8, 13, 24, 0.96));
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 14px;
+      }
+      .panel-card h3 { margin: 0 0 8px; font-size: 0.96rem; color: #eef6ff; }
+      .panel-card p { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+      .stat-bar {
+        display: grid; gap: 10px; margin-top: 12px;
+      }
+      .stat-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #dbeafe; font-size: 0.92rem; }
+      .bar-track { height: 8px; border-radius: 999px; background: rgba(148,163,184,0.12); overflow: hidden; }
+      .bar-fill { height: 100%; border-radius: inherit; background: linear-gradient(135deg, var(--brand), var(--brand-2)); }
+      .bar-fill.blue { background: linear-gradient(135deg, #38bdf8, #818cf8); }
+      .bar-fill.green { background: linear-gradient(135deg, #22d3ee, #2dd4bf); }
+      .offer-list { display: grid; gap: 10px; margin-top: 10px; }
+      .offer-item {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 10px; border-radius: 14px; border: 1px solid rgba(148,163,184,0.12); background: rgba(8, 13, 24, 0.98);
+      }
+      .offer-meta strong { display: block; font-size: 0.95rem; }
+      .offer-meta span { color: var(--muted); font-size: 0.84rem; }
+      .tag {
+        border-radius: 999px; padding: 6px 8px; font-size: 0.75rem; background: rgba(124,92,255,0.12); color: #e9e5ff; border: 1px solid rgba(124,92,255,0.18);
+      }
+      .tag.green { background: rgba(45,212,191,0.12); color: #dffcf6; border-color: rgba(45,212,191,0.18); }
+      .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+      .chip { border-radius: 999px; padding: 7px 10px; background: rgba(148,163,184,0.08); color: #dbe7fb; border: 1px solid rgba(148,163,184,0.14); font-size: 0.83rem; }
+      .sparkline { display: flex; align-items: flex-end; gap: 8px; height: 58px; margin-top: 8px; }
+      .sparkline span { width: 10px; border-radius: 999px; background: linear-gradient(180deg, #22d3ee, #7c5cff); opacity: 0.92; }
+      .sparkline span:nth-child(1) { height: 24px; }
+      .sparkline span:nth-child(2) { height: 36px; }
+      .sparkline span:nth-child(3) { height: 46px; }
+      .sparkline span:nth-child(4) { height: 28px; }
+      .sparkline span:nth-child(5) { height: 52px; }
+      .sparkline span:nth-child(6) { height: 40px; }
+
+      .section-head {
+        display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px;
+        align-items: end; margin-bottom: 18px;
+      }
+      .section-head h2 {
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+        margin: 10px 0 8px;
+      }
+      .lede { color: var(--muted); max-width: 700px; line-height: 1.6; }
+
+      .grid-2, .grid-3, .grid-4 {
+        display: grid; gap: 18px;
+      }
+      .grid-2 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+      .grid-4 { grid-template-columns: repeat(4, 1fr); }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: linear-gradient(180deg, rgba(8, 14, 23, 0.98), rgba(7, 12, 20, 0.98));
+        box-shadow: var(--shadow);
+        padding: 18px;
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      }
+      .card:hover { transform: translateY(-2px); border-color: rgba(124,92,255,0.35); background: linear-gradient(180deg, rgba(12, 18, 31, 0.98), rgba(8,13,23,0.98)); }
+      .card-icon {
+        width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px;
+        background: linear-gradient(135deg, rgba(124,92,255,0.14), rgba(56,189,248,0.10));
+        border: 1px solid rgba(148,163,184,0.16);
+        color: #edf4ff; font-size: 1.05rem; margin-bottom: 10px;
+      }
+      .card h3 { margin: 0 0 10px; font-size: 1.1rem; }
+      .card p { margin: 0; color: var(--muted); line-height: 1.55; }
+
+      .how-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+      .step-card { position: relative; overflow: hidden; }
+      .step-num {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 42px; height: 42px; border-radius: 14px;
+        background: linear-gradient(135deg, rgba(124,92,255,0.16), rgba(56,189,248,0.16));
+        border: 1px solid rgba(148,163,184,0.16);
+        color: #eff6ff; font-weight: 700; margin-bottom: 10px;
+      }
+      .step-card::after {
+        content: ""; position: absolute; right: -16px; top: 18px; height: 2px; width: 35px; background: linear-gradient(90deg, rgba(124,92,255,0.5), transparent);
+      }
+      .step-card:last-child::after { display: none; }
+
+      .dashboard-preview { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; align-items: stretch; }
+      .mini-widget { display: grid; gap: 9px; }
+      .tiny-stat {
+        display: flex; justify-content: space-between; align-items: center; gap: 8px;
+        padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(148,163,184,0.12); background: rgba(7,12,20,0.92);
+      }
+      .tiny-stat strong { font-size: 1.02rem; }
+      .tiny-stat span { color: var(--muted); font-size: 0.88rem; }
+      .geo-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+      .geo-pill {
+        border-radius: 14px; padding: 10px; border: 1px solid rgba(148,163,184,0.12);
+        background: rgba(8, 13, 24, 0.98); color: #eaf3ff;
+      }
+      .geo-pill small { display: block; color: var(--muted); margin-top: 4px; }
+
+      .testimonials .grid-3 { align-items: stretch; }
+      .quote-card { display: flex; flex-direction: column; gap: 12px; }
+      .quote-card p { color: #e7efff; line-height: 1.6; }
+      .person { display: flex; align-items: center; gap: 10px; }
+      .avatar {
+        width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+        background: linear-gradient(135deg, rgba(124,92,255,0.24), rgba(56,189,248,0.18));
+        border: 1px solid rgba(148,163,184,0.18);
+        font-weight: 700;
+      }
+      .person strong { display: block; font-size: 0.98rem; }
+      .person span { color: var(--muted); font-size: 0.88rem; }
+
+      .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .price-card { position: relative; overflow: hidden; }
+      .price-card.featured { border-color: rgba(124,92,255,0.42); background: linear-gradient(180deg, rgba(9, 15, 27, 0.98), rgba(11, 18, 32, 0.98)); }
+      .price-card .pill { display: inline-flex; padding: 6px 8px; border-radius: 999px; background: rgba(124,92,255,0.12); border: 1px solid rgba(124,92,255,0.18); color: #e8e5ff; font-size: 0.8rem; }
+      .price { font-size: 2rem; font-weight: 800; color: #fff; letter-spacing: -0.04em; margin: 10px 0 6px; }
+      .price small { font-size: 0.92rem; color: var(--muted); font-weight: 500; }
+      .price-card ul { list-style: none; padding: 0; margin: 14px 0 18px; display: grid; gap: 10px; color: #eaf3ff; }
+      .price-card li::before { content: "✓"; color: var(--brand-2); margin-right: 8px; }
+
+      .waitlist-card { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 18px; align-items: stretch; }
+      .form-wrap { display: grid; gap: 14px; }
+      .input-group { display: grid; gap: 6px; }
+      .input-group label { color: #eaf2ff; font-weight: 600; font-size: 0.92rem; }
+      .input-group input, .input-group textarea {
+        width: 100%; border-radius: 14px; border: 1px solid rgba(148,163,184,0.16);
+        background: rgba(7,12,20,0.96); color: #eff6ff; padding: 12px 12px;
+      }
+      .input-group textarea { min-height: 88px; resize: vertical; }
+      .input-group input:focus, .input-group textarea:focus { outline: 2px solid rgba(124,92,255,0.35); border-color: rgba(124,92,255,0.35); }
+      .form-note { color: var(--muted); font-size: 0.92rem; }
+      .success-message { display: none; color: #dffcf6; background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.18); border-radius: 12px; padding: 10px 12px; font-size: 0.92rem; }
+
+      .faq-list { display: grid; gap: 12px; }
+      .faq-item {
+        border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(180deg, rgba(8, 14, 23, 0.98), rgba(6, 10, 18, 0.98));
+        box-shadow: var(--shadow); overflow: hidden;
+      }
+      .faq-question { width: 100%; border: 0; background: transparent; text-align: left; color: #eff6ff; font-weight: 700; padding: 14px 16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+      .faq-answer {
+        max-height: 0; overflow: hidden; transition: max-height 220ms ease;
+        color: var(--muted); padding: 0 16px;
+      }
+      .faq-item.active .faq-answer { max-height: 140px; padding: 0 16px 14px; }
+      .faq-item.active .faq-question svg { transform: rotate(45deg); }
+
+      footer {
+        border-top: 1px solid rgba(148,163,184,0.12); padding: 22px 0 34px; color: var(--muted);
+      }
+      .footer-grid { display:flex; align-items:flex-start; justify-content:space-between; gap: 18px; flex-wrap: wrap; }
+      .footer-links { display:flex; gap: 18px; flex-wrap: wrap; }
+
+      .reveal { opacity: 0; transform: translateY(18px); transition: opacity 460ms ease, transform 460ms ease; }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+
+      @media (max-width: 1080px) {
+        .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        .how-grid { grid-template-columns: repeat(2, 1fr); }
+        .pricing-grid, .waitlist-card { grid-template-columns: 1fr; }
+        .dashboard-preview { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 980px) {
+        .nav-links { display: none; }
+        .button-row .btn-secondary { display: none; }
+        .menu-toggle { display: inline-flex; border: 1px solid rgba(148,163,184,0.2); border-radius: 10px; background: rgba(7,12,20,0.95); color:#eff6ff; padding: 8px 10px; cursor: pointer; }
+        .hero-grid { grid-template-columns: 1fr; }
+        .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      }
+
+      @media (max-width: 760px) {
+        .section { padding: 58px 0; }
+        .hero-copy h1 { font-size: clamp(2.25rem, 10vw, 3rem); }
+        .grid-2, .grid-3, .grid-4, .how-grid { grid-template-columns: 1fr; }
+        .dashboard-grid { grid-template-columns: 1fr; }
+        .hero-metrics { display: grid; grid-template-columns: repeat(2, 1fr); }
+        .nav-inner { min-height: 68px; }
+      }
+
+      @media (max-width: 560px) {
+        .container { width: min(100% - 16px, 1160px); }
+        .button-row .btn-primary { padding: 10px 12px; font-size: 0.95rem; }
+        .hero-metrics { grid-template-columns: 1fr; }
+        .badge-row { gap: 8px; }
+        .chip-row { gap: 6px; }
+        .footer-links { gap: 10px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="container nav-inner">
+        <a class="brand" href="#top">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>OfferVault AI</span>
+        </a>
+        <nav class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <div class="button-row">
+          <a class="btn btn-secondary" href="#waitlist">Join Beta</a>
+          <a class="btn btn-primary" href="#waitlist">Book Demo</a>
+          <button class="menu-toggle" type="button" aria-label="Open navigation">☰</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="section">
+        <div class="container hero-grid">
+          <article class="hero-copy reveal">
+            <p class="eyebrow">AI Affiliate Offer CRM</p>
+            <h1>Stop Managing Affiliate Offers in Excel Sheets</h1>
+            <p>
+              OfferVault AI automatically extracts offers from advertiser emails, tracks publishers, monitors payouts,
+              calculates margins, and alerts you before campaigns expire — all from one premium operating system.
+            </p>
+            <div class="badge-row">
+              <span class="badge-chip">Gmail + Outlook</span>
+              <span class="badge-chip">Advertiser Intelligence</span>
+              <span class="badge-chip">Smart Alerts</span>
+              <span class="badge-chip">Margin Tracking</span>
+            </div>
+            <div class="button-row">
+              <a class="btn btn-primary" href="#waitlist">Join Beta</a>
+              <a class="btn btn-secondary" href="#pricing">Book Demo</a>
+            </div>
+            <div class="hero-metrics">
+              <article class="metric-card">
+                <strong>10+ hrs</strong>
+                <span>saved every week by automating offer intake and follow-up</span>
+              </article>
+              <article class="metric-card">
+                <strong>98.4%</strong>
+                <span>offer data extraction accuracy from advertiser emails</span>
+              </article>
+              <article class="metric-card">
+                <strong>24/7</strong>
+                <span>smart alerts for expiry, payout changes, and deal updates</span>
+              </article>
+            </div>
+          </article>
+
+          <aside class="hero-panel reveal" aria-label="OfferVault AI dashboard preview">
+            <div class="dashboard-topbar">
+              <div>
+                <div class="mini-badge">Live CRM • Revenue Ops</div>
+                <h2 style="margin: 8px 0 0; font-size: 1.16rem; letter-spacing: -0.03em;">Offer intelligence overview</h2>
+              </div>
+              <span class="mini-pill">Updated 2 min ago</span>
+            </div>
+            <div class="dashboard-grid">
+              <section class="panel-card">
+                <h3>Monthly Profit</h3>
+                <p style="font-size: 1.7rem; color:#fff; font-weight: 700; letter-spacing:-0.04em;">$184,250</p>
+                <p>+24.1% from last month</p>
+                <div class="sparkline" aria-label="Revenue trend chart">
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-row"><span>Net margin</span><strong>41.8%</strong></div>
+                  <div class="bar-track"><div class="bar-fill green" style="width: 82%"></div></div>
+                  <div class="stat-row"><span>Offer coverage</span><strong>92%</strong></div>
+                  <div class="bar-track"><div class="bar-fill blue" style="width: 92%"></div></div>
+                </div>
+              </section>
+
+              <section class="panel-card">
+                <h3>Pipeline Health</h3>
+                <div class="offer-list">
+                  <article class="offer-item">
+                    <div class="offer-meta"><strong>Lead Gen Pro</strong><span>Expiring in 4 days</span></div>
+                    <span class="tag">Alert</span>
+                  </article>
+                  <article class="offer-item">
+                    <div class="offer-meta"><strong>FinTech CPA</strong><span>New payout rules</span></div>
+                    <span class="tag green">Live</span>
+                  </article>
+                  <article class="offer-item">
+                    <div class="offer-meta"><strong>App Install Max</strong><span>Publisher overlap</span></div>
+                    <span class="tag">Review</span>
+                  </article>
+                </div>
+              </section>
+            </div>
+
+            <div class="chip-row" role="list" aria-label="AI features">
+              <span class="chip">AI email parsing</span>
+              <span class="chip">Advertiser CRM</span>
+              <span class="chip">Margin tracking</span>
+              <span class="chip">Smart alerts</span>
+              <span class="chip">Duplication scan</span>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section reveal" id="problem">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Why teams switch</p>
+              <h2>The old way breaks at every growth stage</h2>
+            </div>
+            <p class="lede">Manual workflows slow down partnerships, create missed opportunities, and leave revenue on the table.</p>
+          </div>
+          <div class="grid-2">
+            <article class="card"><h3>Managing offers in spreadsheets</h3><p>Offer details, contacts, and expiry dates become fragmented as campaigns scale.</p></article>
+            <article class="card"><h3>Losing advertiser contacts</h3><p>Critical account context gets buried in inboxes, Slack threads, and one-off files.</p></article>
+            <article class="card"><h3>Missing offer expiry dates</h3><p>Campaigns silently disappear or renew without visibility into performance windows.</p></article>
+            <article class="card"><h3>Manual payout calculations</h3><p>Margin math is error-prone and keeps your finance and growth teams out of sync.</p></article>
+            <article class="card"><h3>No visibility into margins</h3><p>Without real-time profit insight, teams over-allocate spend and under-forecast revenue.</p></article>
+            <article class="card"><h3>Slow team collaboration</h3><p>One person owns the database, but your network, media, and ops teams need live context.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="features">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Core platform</p>
+              <h2>Everything your offer team needs in one beautiful workspace</h2>
+            </div>
+            <p class="lede">Built for affiliate managers, media buyers, and network owners who need speed, accuracy, and clean visibility.</p>
+          </div>
+          <div class="grid-4">
+            <article class="card"><div class="card-icon">✉️</div><h3>AI Email Parsing</h3><p>Automatically read advertiser emails and extract offers, payouts, GEOs, and deadlines with structured intelligence.</p></article>
+            <article class="card"><div class="card-icon">🧭</div><h3>Advertiser CRM</h3><p>Keep every advertiser account, contact history, and commercial note in a single source of truth.</p></article>
+            <article class="card"><div class="card-icon">👥</div><h3>Publisher Management</h3><p>Track publisher relationships, approvals, and performance from a live operations dashboard.</p></article>
+            <article class="card"><div class="card-icon">📈</div><h3>Margin Tracking</h3><p>Measure profitability in real time and understand where to invest, scale, or pause campaigns.</p></article>
+            <article class="card"><div class="card-icon">🧠</div><h3>Offer Intelligence</h3><p>Spot duplicates, detect advertiser changes, and identify high-potential campaigns in minutes.</p></article>
+            <article class="card"><div class="card-icon">⏰</div><h3>Expiry Alerts</h3><p>Receive sharp, action-oriented alerts before campaigns lapse or payout terms change.</p></article>
+            <article class="card"><div class="card-icon">🧬</div><h3>Duplicate Offer Detection</h3><p>Catch repeated offers and overlapping publishers before they create revenue leakage.</p></article>
+            <article class="card"><div class="card-icon">🔔</div><h3>Real-Time Notifications</h3><p>Push updates to your team the moment new offers, payout changes, or urgent actions appear.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">How it works</p>
+              <h2>Launch smarter workflows in five simple steps</h2>
+            </div>
+            <p class="lede">From inbox onboarding to actionable insights, OfferVault AI upgrades every stage of your offer operations.</p>
+          </div>
+          <div class="how-grid">
+            <article class="card step-card"><div class="step-num">1</div><h3>Connect Gmail or Outlook</h3><p>Bring your existing inbox into the platform and start capturing offers automatically.</p></article>
+            <article class="card step-card"><div class="step-num">2</div><h3>AI extracts campaign data</h3><p>Structured offer details, payout rates, GEOs, links, and expiry dates are pulled into the CRM.</p></article>
+            <article class="card step-card"><div class="step-num">3</div><h3>Manage advertisers and publishers</h3><p>Organize relationships, documents, status updates, and commercial notes in one place.</p></article>
+            <article class="card step-card"><div class="step-num">4</div><h3>Track margins and profits</h3><p>See gross margin, payouts, revenue, and campaign health at a glance for every account.</p></article>
+            <article class="card step-card"><div class="step-num">5</div><h3>Receive smart alerts</h3><p>Stay ahead of expiries, duplicate offers, and payout changes with real-time notifications.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="dashboard">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Dashboard preview</p>
+              <h2>Built for revenue, operations, and growth teams</h2>
+            </div>
+            <p class="lede">A premium analytics layer for the numbers that matter: leads, offers, margins, top GEOs, and campaign performance.</p>
+          </div>
+          <div class="dashboard-preview">
+            <article class="card">
+              <div class="dashboard-topbar" style="margin-bottom: 10px;">
+                <div>
+                  <div class="mini-badge">Live Profit</div>
+                  <h3 style="margin: 8px 0 0; font-size: 1.08rem;">Performance snapshot</h3>
+                </div>
+                <span class="mini-pill">Q2 2026</span>
+              </div>
+              <div class="grid-2">
+                <article class="panel-card"><h3>Total Advertisers</h3><p style="font-size: 1.55rem; color:#fff; font-weight: 700;">128</p><p>New relationships +14 this month</p></article>
+                <article class="panel-card"><h3>Live Offers</h3><p style="font-size: 1.55rem; color:#fff; font-weight: 700;">83</p><p>42 active offers are earning revenue</p></article>
+                <article class="panel-card"><h3>Active Publishers</h3><p style="font-size: 1.55rem; color:#fff; font-weight: 700;">214</p><p>19 new publishers onboarded</p></article>
+                <article class="panel-card"><h3>Monthly Profit</h3><p style="font-size: 1.55rem; color:#fff; font-weight: 700;">$184K</p><p>+24.1% from last month</p></article>
+              </div>
+            </article>
+
+            <article class="card mini-widget">
+              <section class="panel-card">
+                <h3>Top GEOs</h3>
+                <div class="geo-list">
+                  <div class="geo-pill">US <small>36% of revenue</small></div>
+                  <div class="geo-pill">DE <small>21% of revenue</small></div>
+                  <div class="geo-pill">UK <small>15% of revenue</small></div>
+                  <div class="geo-pill">CA <small>10% of revenue</small></div>
+                </div>
+              </section>
+              <section class="panel-card">
+                <h3>Top Campaigns</h3>
+                <div class="offer-list">
+                  <article class="offer-item"><div class="offer-meta"><strong>Lead Gen Pro</strong><span>CTR 6.2%</span></div><span class="tag">+$11.8K</span></article>
+                  <article class="offer-item"><div class="offer-meta"><strong>FinTech CPA</strong><span>Margin 42%</span></div><span class="tag green">+$9.1K</span></article>
+                  <article class="offer-item"><div class="offer-meta"><strong>App Install Max</strong><span>Expiring this week</span></div><span class="tag">Alert</span></article>
+                </div>
+              </section>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Benefits</p>
+              <h2>Why premium teams switch from spreadsheets to OfferVault AI</h2>
+            </div>
+            <p class="lede">The platform does not just store data — it gives your team a better operating system for affiliate growth.</p>
+          </div>
+          <div class="grid-3">
+            <article class="card"><h3>No More Excel Sheets</h3><p>Replace fragile tracking sheets with one secure workspace everyone can trust.</p></article>
+            <article class="card"><h3>Save 10+ Hours Per Week</h3><p>Automate data extraction, updates, and alerting so your team can focus on growth instead of admin.</p></article>
+            <article class="card"><h3>Centralized Offer Database</h3><p>All campaigns, contacts, payouts, and notes live in one source of truth for the entire team.</p></article>
+            <article class="card"><h3>Better Advertiser Relationships</h3><p>Respond faster, remember every detail, and build premium partnerships with complete context.</p></article>
+            <article class="card"><h3>Real-Time Profit Tracking</h3><p>Keep visibility on margin, payouts, and opportunity size as campaigns move through the funnel.</p></article>
+            <article class="card"><h3>AI-Powered Automation</h3><p>From parsing emails to generating summary briefs, the system handles the repetitive work for you.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section testimonials reveal">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Testimonials</p>
+              <h2>What leaders say about the future of affiliate operations</h2>
+            </div>
+            <p class="lede">Designed to help performance teams move faster without losing control of the data.</p>
+          </div>
+          <div class="grid-3">
+            <article class="card quote-card">
+              <p>“OfferVault AI cut our manual offer cleanup in half and gave us one place to manage advertiser conversations. Our team finally has a real CRM instead of a spreadsheet graveyard.”</p>
+              <div class="person"><span class="avatar">AL</span><span><strong>Ava Lewis</strong><br/><span>Affiliate Manager</span></span></div>
+            </article>
+            <article class="card quote-card">
+              <p>“The alerting and margin tracking saved us from missing expiry windows and bad payout changes. It feels like we hired a full-time ops analyst.”</p>
+              <div class="person"><span class="avatar">MJ</span><span><strong>Marcus James</strong><br/><span>Media Buyer</span></span></div>
+            </article>
+            <article class="card quote-card">
+              <p>“As a network owner, I need clean data, structure, and visibility. OfferVault AI gives us a polished platform that looks premium and helps our team move faster.”</p>
+              <div class="person"><span class="avatar">ST</span><span><strong>Sofia Tran</strong><br/><span>Network Owner</span></span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="pricing">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Pricing</p>
+              <h2>Simple plans for ambitious teams</h2>
+            </div>
+            <p class="lede">Start with early access, scale into the full intelligence platform, and get a tailored plan for enterprise operations.</p>
+          </div>
+          <div class="pricing-grid">
+            <article class="card price-card">
+              <span class="pill">Starter</span>
+              <h3 style="margin-top: 10px;">For lean affiliate teams</h3>
+              <p class="price">Coming Soon<small> / Early access</small></p>
+              <ul>
+                <li>Offer intake and parsing</li>
+                <li>Basic advertiser CRM</li>
+                <li>Expiry alerts</li>
+              </ul>
+              <a class="btn btn-secondary" href="#waitlist">Get on waitlist</a>
+            </article>
+            <article class="card price-card featured">
+              <span class="pill">Agency</span>
+              <h3 style="margin-top: 10px;">For multi-client networks</h3>
+              <p class="price">Coming Soon<small> / Premium</small></p>
+              <ul>
+                <li>Multi-vertical tracking</li>
+                <li>Publisher collaboration</li>
+                <li>Advanced margin insights</li>
+              </ul>
+              <a class="btn btn-primary" href="#waitlist">Reserve a demo</a>
+            </article>
+            <article class="card price-card">
+              <span class="pill">Enterprise</span>
+              <h3 style="margin-top: 10px;">For growing operators</h3>
+              <p class="price">Contact Us</p>
+              <ul>
+                <li>Dedicated onboarding</li>
+                <li>Security and governance</li>
+                <li>Custom integrations</li>
+              </ul>
+              <a class="btn btn-secondary" href="mailto:sales@offervault.ai">Contact sales</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="waitlist">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Waitlist</p>
+              <h2>Join the beta and request your custom demo</h2>
+            </div>
+            <p class="lede">We are onboarding premium affiliate teams and will reach out with early access options, onboarding support, and tailored product walkthroughs.</p>
+          </div>
+          <div class="waitlist-card">
+            <article class="card">
+              <h3 style="margin-top: 0;">Why join</h3>
+              <ul style="list-style: none; padding: 0; margin: 0 0 14px; display:grid; gap: 10px; color: #eaf4ff;">
+                <li>• Early access to the AI offer parsing pipeline</li>
+                <li>• Priority onboarding and direct product feedback</li>
+                <li>• Demo tailored to affiliate managers, media buyers, or network owners</li>
+                <li>• Launch pricing and beta perks for founding teams</li>
+              </ul>
+              <div class="mini-badge">Fast response • Private beta • No spam</div>
+            </article>
+
+            <article class="card form-wrap">
+              <form id="waitlistForm" action="https://formspree.io/f/xnqeywpd" method="POST">
+                <div class="input-group">
+                  <label for="name">Name</label>
+                  <input id="name" name="name" type="text" placeholder="Avery Chen" required />
+                </div>
+                <div class="input-group">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" placeholder="you@company.com" required />
+                </div>
+                <div class="input-group">
+                  <label for="company">Company Name</label>
+                  <input id="company" name="company" type="text" placeholder="OfferFlow Media" required />
+                </div>
+                <div class="input-group">
+                  <label for="message">What would you like to automate?</label>
+                  <textarea id="message" name="message" placeholder="We want to automate offer parsing, publisher tracking, and expiry alerts across our team."></textarea>
+                </div>
+                <div class="button-row" style="margin-top: 2px;">
+                  <button class="btn btn-primary" type="submit">Request Beta Access</button>
+                  <a class="btn btn-secondary" href="mailto:hello@offervault.ai">Email Us</a>
+                </div>
+                <p class="form-note">This form is connected to Formspree for beta signups and demo requests.</p>
+                <p class="success-message" id="successMessage">Thank you — your request has been received. We will contact you shortly.</p>
+              </form>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="faq">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">FAQ</p>
+              <h2>Frequently asked questions</h2>
+            </div>
+            <p class="lede">Everything you need to know before joining the beta or booking a walkthrough.</p>
+          </div>
+          <div class="faq-list">
+            <article class="faq-item active">
+              <button class="faq-question" type="button">How does AI email parsing work?<span aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" /></svg></span></button>
+              <div class="faq-answer">The system reads advertiser emails, identifies offer details, payout terms, expiry dates, GEOs, and contacts, then turns them into structured CRM records for your team.</div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">Does it support Gmail?<span aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" /></svg></span></button>
+              <div class="faq-answer">Yes. The platform supports Gmail and is designed to work with your current mailbox flow, including offer-related inbound communications and account updates.</div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">Does it support Outlook?<span aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" /></svg></span></button>
+              <div class="faq-answer">Yes. Outlook works seamlessly with the same automation, CRM, and alerting workflows so teams can standardize their operations across inboxes.</div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">Can teams collaborate?<span aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" /></svg></span></button>
+              <div class="faq-answer">Absolutely. Teams can share advertiser notes, review active offers, monitor publisher activity, and keep everyone aligned with live updates and smart alerts.</div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">Is there a free trial?<span aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" /></svg></span></button>
+              <div class="faq-answer">Our beta and early access program is currently open. Join the waitlist to get product updates, onboarding guidance, and the first opportunity to test the platform.</div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <strong style="color:#fff; letter-spacing:-0.03em;">OfferVault AI</strong>
+          <p style="margin: 6px 0 0; max-width: 420px;">The Operating System For Affiliate Offer Management</p>
+        </div>
+        <div class="footer-links">
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+          <a href="#waitlist">Contact</a>
+        </div>
+        <p style="margin: 0;">© <span id="year"></span> OfferVault AI. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+      document.querySelectorAll('.faq-question').forEach((button) => {
+        button.addEventListener('click', () => {
+          const item = button.closest('.faq-item');
+          document.querySelectorAll('.faq-item').forEach((entry) => entry.classList.remove('active'));
+          item.classList.add('active');
+        });
+      });
+
+      const form = document.getElementById('waitlistForm');
+      const successMessage = document.getElementById('successMessage');
+      if (form) {
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const formData = new FormData(form);
+          try {
+            await fetch(form.action, {
+              method: 'POST',
+              body: formData,
+              headers: { 'Accept': 'application/json' }
+            });
+            successMessage.style.display = 'block';
+            form.reset();
+          } catch (error) {
+            successMessage.textContent = 'Thanks for your interest. Please email hello@offervault.ai directly if the form is unavailable.';
+            successMessage.style.display = 'block';
+          }
+        });
+      }
+
+      const menuToggle = document.querySelector('.menu-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+          navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+          navLinks.style.position = 'absolute';
+          navLinks.style.top = '72px';
+          navLinks.style.left = '12px';
+          navLinks.style.right = '12px';
+          navLinks.style.background = 'rgba(5, 10, 17, 0.98)';
+          navLinks.style.border = '1px solid rgba(148,163,184,0.14)';
+          navLinks.style.borderRadius = '16px';
+          navLinks.style.padding = '10px 12px';
+          navLinks.style.flexDirection = 'column';
+          navLinks.style.alignItems = 'flex-start';
+        });
+      }
+    </script>
+  </body>
+</html>
