@@ -779,8 +779,8 @@
                   <button class="btn btn-primary" type="submit">Request Beta Access</button>
                   <a class="btn btn-secondary" href="mailto:hello@offervault.ai">Email Us</a>
                 </div>
-                <p class="form-note">This form is connected to Formspree for beta signups and demo requests.</p>
-                <p class="success-message" id="successMessage">Thank you — your request has been received. We will contact you shortly.</p>
+                <p class="form-note">This form now also generates a CSV file you can open in Google Sheets and opens a prefilled email draft for shashanktripathi275@gmail.com.</p>
+                <p class="success-message" id="successMessage">Thank you — your request has been prepared for your email and spreadsheet workflow.</p>
               </form>
             </article>
           </div>
@@ -862,17 +862,51 @@
       if (form) {
         form.addEventListener('submit', async (event) => {
           event.preventDefault();
+
           const formData = new FormData(form);
+          const name = (formData.get('name') || '').toString().trim();
+          const email = (formData.get('email') || '').toString().trim();
+          const company = (formData.get('company') || '').toString().trim();
+          const message = (formData.get('message') || '').toString().trim();
+          const submittedAt = new Date().toISOString();
+
+          const csvRows = [
+            ['Name', 'Email', 'Company', 'Message', 'Submitted At'],
+            [name, email, company, message, submittedAt]
+          ];
+
+          const csvContent = csvRows.map((row) => row.map((cell) => '"' + String(cell).replaceAll('"', '""') + '"').join(',')).join('\n');
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'offervault_beta_signups.csv';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(url);
+
+          const emailBody = [
+            'Name: ' + name,
+            'Email: ' + email,
+            'Company: ' + company,
+            'Message: ' + message,
+            'Submitted At: ' + submittedAt
+          ].join('\n');
+
+          window.location.href = 'mailto:shashanktripathi275@gmail.com?subject=' + encodeURIComponent('OfferVault AI Beta Signup') + '&body=' + encodeURIComponent(emailBody);
+
           try {
             await fetch(form.action, {
               method: 'POST',
               body: formData,
               headers: { 'Accept': 'application/json' }
             });
+            successMessage.textContent = 'Thank you — your details were prepared for your email and Google Sheets workflow.';
             successMessage.style.display = 'block';
             form.reset();
           } catch (error) {
-            successMessage.textContent = 'Thanks for your interest. Please email hello@offervault.ai directly if the form is unavailable.';
+            successMessage.textContent = 'Thanks for your interest. Your email draft was opened; if needed, please email hello@offervault.ai directly.';
             successMessage.style.display = 'block';
           }
         });
